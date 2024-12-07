@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= manufacturer ? manufacturer + " " + model : "Aircraft Details" %></title>
+    <%- include('../components/head.ejs') %>
+    <style>
+        * {
+            font-family: "Poppins";
+        }
+        .detail-item {
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+        }
+        .card {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <%- include('../components/navbar.ejs') %>
+
+    <div class="container mt-4">
+        <form action="/aircraft" method="POST" class="mb-5">
+            <small class="text-dark fw-semibold fs-5">Search by manufacturer and model!</small>
+            <div class="form-row">
+                <div class="form-group">
+                    <select class="form-control" id="type" name="type">
+                        <option value="aircraft">Aircraft</option>
+                        <option value="helicopter">Helicopter</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control  w-100" id="manufacturer" name="manufacturer" placeholder="Manufacturer" value="<%= manufacturer ? manufacturer : '' %>" />
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control  w-100" id="model" name="model" placeholder="Model" value="<%= model ? model : '' %>" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                </div>
+            </div>
+            
+        </form>
+    
+
+        <% if (type === 'aircraft') { %>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Basic Info</h5>
+                            <p class="card-text"><strong>Manufacturer:</strong> <%= manufacturer %></p>
+                            <p class="card-text"><strong>Model:</strong> <%= model %></p>
+                            <p class="card-text"><strong>Engine Type:</strong> <%= data.engine_type %></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Performance</h5>
+                            <p class="card-text"><strong>Max Speed:</strong> <%= data.max_speed_knots %> knots</p>
+                            <p class="card-text"><strong>Cruise Speed:</strong> <%= data.cruise_speed_knots %> knots</p>
+                            <p class="card-text"><strong>Range:</strong> <%= data.range_nautical_miles %> nautical miles</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Dimensions & Weight</h5>
+                            <p class="card-text"><strong>Length:</strong> <%= data.length_ft %> ft</p>
+                            <p class="card-text"><strong>Height:</strong> <%= data.height_ft %> ft</p>
+                            <p class="card-text"><strong>Wing Span:</strong> <%= data.wing_span_ft %> ft</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } else if (type === 'helicopter') { %>
+
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title"><%= manufacturer %> <%= model %></h4>
+                            </div>
+                            <div class="card-body">
+                                <h5>Specifications</h5>
+                                <p class="detail-item"><strong>Max Speed:</strong> <%= data.max_speed_sl_knots %> knots</p>
+                                <p class="detail-item"><strong>Cruise Speed:</strong> <%= data.cruise_speed_sl_knots %> knots</p>
+                                <p class="detail-item"><strong>Range:</strong> <%= data.range_nautical_miles %> nautical miles</p>
+                                <p class="detail-item"><strong>Cruise Time:</strong> <%= data.cruise_time_min %> minutes</p>
+                                <p class="detail-item"><strong>Fuel Capacity:</strong> <%= data.fuel_capacity_gallons %> gallons</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Performance</h5>
+                                <p class="detail-item"><strong>Gross External Load:</strong> <%= data.gross_external_load_lbs %> lbs</p>
+                                <p class="detail-item"><strong>External Load Limit:</strong> <%= data.external_load_limit_lbs %> lbs</p>
+                                <h5 class="mt-3">Dimensions & Weight</h5>
+                                <p class="detail-item"><strong>Main Rotor Diameter:</strong> <%= data.main_rotor_diameter_ft %> ft</p>
+                                <p class="detail-item"><strong>Number of Blades:</strong> <%= data.num_blades %></p>
+                                <p class="detail-item"><strong>Blade Material:</strong> <%= data.blade_material %></p>
+                                <p class="detail-item"><strong>Rotor Type:</strong> <%= data.rotor_type %></p>
+                                <p class="detail-item"><strong>Storage Width:</strong> <%= data.storage_width_ft %> ft</p>
+                                <p class="detail-item"><strong>Length:</strong> <%= data.length_ft %> ft</p>
+                                <p class="detail-item"><strong>Height:</strong> <%= data.height_ft %> ft</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+            <% } %>
+    </div>
+
+    <% if (error) { %>
+        <script>
+            Swal.fire({
+                title: "An error occurred!",
+                text: "<%= error %>",
+                icon: "error"
+            });
+        </script>
+    <% } %>
+
+    <%- include('../components/footer.ejs') %>
+</body>
+</html>

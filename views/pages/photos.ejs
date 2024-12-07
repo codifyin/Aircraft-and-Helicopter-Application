@@ -1,0 +1,71 @@
+<!-- photos.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aircraft Photos</title>
+    <%- include('../components/head.ejs') %>
+    <style>
+         * {
+            font-family: "Poppins";
+        }
+        .detail-item {
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+        }
+        .card {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <%- include('../components/navbar.ejs') %>
+
+
+    <div class="container mt-4">
+        <form action="/photos" method="GET" class="mb-5">
+            <small class="text-dark fw-semibold fs-5">Search for aircraft model:</small>
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="text" class="form-control w-100" id="model" name="model" placeholder="Enter model" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Display images here -->
+        <div class="row">
+            <% if(images && images.length > 0) { %>
+                <% images.forEach(image => { %>
+                    <div class="col-md-6 mb-4">
+                        <img src="<%= image.urls.regular %>" class="img-fluid" alt="<%= image.alt_description %>">
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="col-md-12">
+                    <p>No images found.</p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+
+    <% if (error) { %>
+        <script>
+            Swal.fire({
+                title: "An error occurred!",
+                text: "<%= error %>",
+                icon: "error"
+            });
+        </script>
+    <% } %>
+
+    <%- include('../components/footer.ejs') %>
+</body>
+</html>
